@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kronos Financial Prediction Web UI</title>
+    <title>Kronos 金融预测网页 UI</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
@@ -441,81 +441,129 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚀 Kronos Financial Prediction Web UI</h1>
-            <p>AI-based financial K-line data prediction analysis platform</p>
+            <h1>🚀 Kronos 金融预测网页 UI</h1>
+            <p>基于 AI 的金融 K 线数据预测分析平台</p>
         </div>
 
         <div class="main-content">
             <div class="control-panel">
-                <h2>🎯 Control Panel</h2>
+                <h2>🎯 控制面板</h2>
 
                 <!-- Model Selection -->
                 <div class="form-group">
-                    <label for="model-select">Select Model:</label>
+                    <label for="model-select">选择模型:</label>
                     <select id="model-select">
-                        <option value="">Please load available models first</option>
+                        <option value="">请先加载可用模型</option>
                     </select>
-                    <small class="form-text">Select the Kronos model to use</small>
+                    <small class="form-text">选择要使用的 Kronos 模型</small>
                 </div>
 
                 <!-- Device Selection -->
                 <div class="form-group">
-                    <label for="device-select">Select Device:</label>
+                    <label for="device-select">选择设备:</label>
                     <select id="device-select">
                         <option value="cpu">CPU</option>
                         <option value="cuda">CUDA (NVIDIA GPU)</option>
                         <option value="mps">MPS (Apple Silicon)</option>
                     </select>
-                    <small class="form-text">Select the device to run the model on</small>
+                    <small class="form-text">选择运行模型的设备</small>
                 </div>
 
                 <!-- Model Status -->
                 <div id="model-status" class="status info" style="display: none;">
-                    Model status information
+                    模型状态信息
                 </div>
 
                 <!-- Load Model Button -->
                 <button id="load-model-btn" class="btn btn-secondary">
-                    🔄 Load Model
+                    🔄 加载模型
                 </button>
+
+                <hr style="margin: 20px 0; border: 1px solid #e2e8f0;">
+
+                <!-- Data Download Section -->
+                <div class="form-group">
+                    <label>📥 下载数据</label>
+                    <small class="form-text">从 Binance 交易所下载实时数据</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="download-symbol">交易对:</label>
+                    <input type="text" id="download-symbol" placeholder="例如: BTC, ETH" value="BTC">
+                    <small class="form-text">输入交易对代码（不含 USDT）</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="download-timeframe">时间周期:</label>
+                    <select id="download-timeframe">
+                        <option value="">请选择时间周期</option>
+                        <option value="1m">1 分钟</option>
+                        <option value="5m">5 分钟</option>
+                        <option value="15m">15 分钟</option>
+                        <option value="30m">30 分钟</option>
+                        <option value="1h" selected>1 小时</option>
+                        <option value="4h">4 小时</option>
+                        <option value="1d">1 天</option>
+                        <option value="1w">1 周</option>
+                        <option value="1M">1 月</option>
+                    </select>
+                    <small class="form-text">选择 K 线时间周期</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="download-points">数据点数:</label>
+                    <input type="number" id="download-points" value="600" min="550" max="10000" step="50">
+                    <small class="form-text">要下载的 K 线根数（推荐 600</small>
+                </div>
+
+                <button id="download-data-btn" class="btn btn-warning">
+                    ⬇️ 下载数据
+                </button>
+
+                <!-- Download Status -->
+                <div id="download-status" class="status" style="display: none;"></div>
 
                 <hr style="margin: 20px 0; border: 1px solid #e2e8f0;">
 
                 <!-- Data File Selection -->
                 <div class="form-group">
-                    <label for="data-file-select">Select Data File:</label>
+                    <label for="data-file-select">选择数据文件:</label>
                     <select id="data-file-select">
-                        <option value="">Please load data file list first</option>
+                        <option value="">请先加载数据文件列表</option>
                     </select>
-                    <small class="form-text">Select K-line data file from data directory</small>
+                    <small class="form-text">从数据目录中选择 K 线数据文件</small>
                 </div>
 
                 <button id="load-data-btn" class="btn btn-secondary">
-                    📁 Load Data
+                    📁 加载数据
+                </button>
+
+                <button id="refresh-data-btn" class="btn btn-secondary" style="margin-top: 10px;">
+                    🔄 刷新文件列表
                 </button>
 
                 <!-- Data Information Display -->
                 <div id="data-info" class="data-info" style="display: none;">
-                    <h3>📊 Data Information</h3>
-                    <p><strong>Rows:</strong> <span id="data-rows">-</span></p>
-                    <p><strong>Columns:</strong> <span id="data-cols">-</span></p>
-                    <p><strong>Time Range:</strong> <span id="data-time-range">-</span></p>
-                    <p><strong>Price Range:</strong> <span id="data-price-range">-</span></p>
-                    <p><strong>Time Frequency:</strong> <span id="data-timeframe">-</span></p>
-                    <p><strong>Prediction Columns:</strong> <span id="data-prediction-cols">-</span></p>
+                    <h3>📊 数据信息</h3>
+                    <p><strong>行数:</strong> <span id="data-rows">-</span></p>
+                    <p><strong>列数:</strong> <span id="data-cols">-</span></p>
+                    <p><strong>时间范围:</strong> <span id="data-time-range">-</span></p>
+                    <p><strong>价格范围:</strong> <span id="data-price-range">-</span></p>
+                    <p><strong>时间频率:</strong> <span id="data-timeframe">-</span></p>
+                    <p><strong>预测列:</strong> <span id="data-prediction-cols">-</span></p>
                 </div>
 
                 <hr style="margin: 20px 0; border: 1px solid #e2e8f0;">
 
                 <!-- Time Window Selector -->
                 <div class="time-window-container">
-                    <h3>⏰ Time Window Selection</h3>
+                    <h3>⏰ 时间窗口选择</h3>
                     <div class="time-window-info">
-                        <span id="window-start">Start: --</span>
-                        <span id="window-end">End: --</span>
-                        <span id="window-size">Window Size: 400+120=520 data points</span>
+                        <span id="window-start">开始: --</span>
+                        <span id="window-end">结束: --</span>
+                        <span id="window-size">窗口大小: 400+120=520 个数据点</span>
                     </div>
-                    
+
                     <div class="time-window-slider">
                         <div class="slider-track">
                             <div class="slider-handle start-handle" id="start-handle"></div>
@@ -523,104 +571,104 @@
                             <div class="slider-handle end-handle" id="end-handle"></div>
                         </div>
                         <div class="slider-labels">
-                            <span id="min-label">Earliest</span>
-                            <span id="max-label">Latest</span>
+                            <span id="min-label">最早</span>
+                            <span id="max-label">最晚</span>
                         </div>
                     </div>
-                    
-                    <small class="form-text">Drag slider to select time window position for 520 data points, green area represents fixed 400+120 data point range</small>
+
+                    <small class="form-text">拖动滑块选择 520 个数据点的时间窗口位置，绿色区域表示固定的 400+120 数据点范围</small>
                 </div>
 
                 <!-- Prediction Parameters -->
                 <div class="form-group">
-                    <label for="lookback">Lookback Window Size:</label>
+                    <label for="lookback">回溯窗口大小:</label>
                     <input type="number" id="lookback" value="400" readonly>
-                    <small class="form-text">Fixed at 400 data points</small>
+                    <small class="form-text">固定为 400 个数据点</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="pred-len">Prediction Length:</label>
+                    <label for="pred-len">预测长度:</label>
                     <input type="number" id="pred-len" value="120" readonly>
-                    <small class="form-text">Fixed at 120 data points</small>
+                    <small class="form-text">固定为 120 个数据点</small>
                 </div>
 
                 <!-- Prediction Quality Parameters -->
                 <div class="form-group">
-                    <label for="temperature">Prediction Temperature (T):</label>
+                    <label for="temperature">预测温度 (T):</label>
                     <input type="range" id="temperature" value="1.0" min="0.1" max="2.0" step="0.1">
                     <span id="temperature-value">1.0</span>
-                    <small class="form-text">Controls prediction randomness, higher values make predictions more diverse, lower values make predictions more conservative</small>
+                    <small class="form-text">控制预测的随机性，较高的值使预测更多样化，较低的值使预测更保守</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="top-p">Nucleus Sampling Parameter (top_p):</label>
+                    <label for="top-p">核采样参数 (top_p):</label>
                     <input type="range" id="top-p" value="0.9" min="0.1" max="1.0" step="0.1">
                     <span id="top-p-value">0.9</span>
-                    <small class="form-text">Controls prediction diversity, higher values consider broader probability distributions</small>
+                    <small class="form-text">控制预测的多样性，较高的值考虑更广泛的概率分布</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="sample-count">Sample Count:</label>
+                    <label for="sample-count">样本数量:</label>
                     <input type="number" id="sample-count" value="1" min="1" max="5" step="1">
-                    <small class="form-text">Generate multiple prediction samples to improve quality (recommended 1-3)</small>
+                    <small class="form-text">生成多个预测样本以提高质量（推荐 1-3）</small>
                 </div>
 
                 <button id="predict-btn" class="btn btn-success" disabled>
-                    🔮 Start Prediction
+                    🔮 开始预测
                 </button>
 
                 <!-- Loading Status -->
                 <div id="loading" class="loading">
                     <div class="spinner"></div>
-                    <p>Processing, please wait...</p>
+                    <p>处理中，请稍候...</p>
                 </div>
             </div>
 
             <div class="chart-container">
-                <h2>📈 Prediction Results Chart</h2>
+                <h2>📈 预测结果图表</h2>
                 <div id="chart"></div>
-                
+
                 <!-- Comparison Analysis -->
                 <div id="comparison-section" class="comparison-section" style="display: none;">
-                    <h3>📊 Prediction vs Actual Data Comparison</h3>
+                    <h3>📊 预测与实际数据对比</h3>
                     <div id="comparison-info" class="comparison-info">
-                        <p><strong>Prediction Type:</strong> <span id="prediction-type">-</span></p>
-                        <p><strong>Comparison Data:</strong> <span id="comparison-data">-</span></p>
+                        <p><strong>预测类型:</strong> <span id="prediction-type">-</span></p>
+                        <p><strong>对比数据:</strong> <span id="comparison-data">-</span></p>
                     </div>
-                    
+
                     <div class="error-stats">
                         <div class="error-stat">
-                            <h4>Mean Absolute Error</h4>
+                            <h4>平均绝对误差</h4>
                             <div class="value" id="mae">-</div>
-                            <div class="unit">Price Units</div>
+                            <div class="unit">价格单位</div>
                         </div>
                         <div class="error-stat">
-                            <h4>Root Mean Square Error</h4>
+                            <h4>均方根误差</h4>
                             <div class="value" id="rmse">-</div>
-                            <div class="unit">Price Units</div>
+                            <div class="unit">价格单位</div>
                         </div>
                         <div class="error-stat">
-                            <h4>Mean Absolute Percentage Error</h4>
+                            <h4>平均绝对百分比误差</h4>
                             <div class="value" id="mape">-</div>
                             <div class="unit">%</div>
                         </div>
                     </div>
-                    
+
                     <div class="error-details">
-                        <h4>Detailed Comparison Data:</h4>
+                        <h4>详细对比数据:</h4>
                         <div style="max-height: 300px; overflow-y: auto;">
                             <table class="comparison-table">
                                 <thead>
                                     <tr>
-                                        <th>Time</th>
-                                        <th>Actual Open</th>
-                                        <th>Predicted Open</th>
-                                        <th>Actual High</th>
-                                        <th>Predicted High</th>
-                                        <th>Actual Low</th>
-                                        <th>Predicted Low</th>
-                                        <th>Actual Close</th>
-                                        <th>Predicted Close</th>
+                                        <th>时间</th>
+                                        <th>实际开盘价</th>
+                                        <th>预测开盘价</th>
+                                        <th>实际最高价</th>
+                                        <th>预测最高价</th>
+                                        <th>实际最低价</th>
+                                        <th>预测最低价</th>
+                                        <th>实际收盘价</th>
+                                        <th>预测收盘价</th>
                                     </tr>
                                 </thead>
                                 <tbody id="comparison-tbody">
@@ -640,6 +688,18 @@
         let availableModels = [];
         let modelLoaded = false;
 
+        // Update predict button state based on model and data loading status
+        function updatePredictButtonState() {
+            const predictBtn = document.getElementById('predict-btn');
+            if (modelLoaded && currentDataFile) {
+                predictBtn.disabled = false;
+                console.log('✅ 预测按钮已启用（模型和数据已加载）');
+            } else {
+                predictBtn.disabled = true;
+                console.log('⚠️ 预测按钮禁用（需要加载模型和数据）');
+            }
+        }
+
         // Initialize after page loads
         document.addEventListener('DOMContentLoaded', function() {
             initializeApp();
@@ -647,21 +707,21 @@
 
         // Initialize application
         async function initializeApp() {
-            console.log('🚀 Initializing Kronos Web UI...');
-            
+            console.log('🚀 正在初始化 Kronos Web UI...');
+
             // Load available models
             await loadAvailableModels();
-            
+
             // Load data file list
             await loadDataFiles();
-            
+
             // Set up event listeners
             setupEventListeners();
-            
+
             // Initialize time slider
             initializeTimeSlider();
-            
-            console.log('✅ Application initialization completed');
+
+            console.log('✅ 应用程序初始化完成');
         }
 
         // Load available models
@@ -671,21 +731,21 @@
                 if (response.data.model_available) {
                     availableModels = response.data.models;
                     populateModelSelect();
-                    console.log('✅ Available models loaded successfully:', availableModels);
+                    console.log('✅ 可用模型加载成功:', availableModels);
                 } else {
-                    console.warn('⚠️ Kronos model library not available');
-                    showStatus('warning', 'Kronos model library not available, will use simulated prediction');
+                    console.warn('⚠️ Kronos 模型库不可用');
+                    showStatus('warning', 'Kronos 模型库不可用，将使用模拟预测');
                 }
             } catch (error) {
-                console.error('❌ Failed to load available models:', error);
-                showStatus('error', 'Failed to load available models');
+                console.error('❌ 加载可用模型失败:', error);
+                showStatus('error', '加载可用模型失败');
             }
         }
 
         // Populate model selection dropdown
         function populateModelSelect() {
             const modelSelect = document.getElementById('model-select');
-            modelSelect.innerHTML = '<option value="">Please select model</option>';
+            modelSelect.innerHTML = '<option value="">请选择模型</option>';
             
             Object.entries(availableModels).forEach(([key, model]) => {
                 const option = document.createElement('option');
@@ -699,33 +759,33 @@
         async function loadModel() {
             const modelKey = document.getElementById('model-select').value;
             const device = document.getElementById('device-select').value;
-            
+
             if (!modelKey) {
-                showStatus('error', 'Please select a model to load');
+                showStatus('error', '请选择要加载的模型');
                 return;
             }
-            
+
             try {
                 showLoading(true);
                 document.getElementById('load-model-btn').disabled = true;
-                
+
                 const response = await axios.post('/api/load-model', {
                     model_key: modelKey,
                     device: device
                 });
-                
+
                 if (response.data.success) {
                     modelLoaded = true;
                     showStatus('success', response.data.message);
                     updateModelStatus();
-                    document.getElementById('predict-btn').disabled = false;
-                    console.log('✅ Model loaded successfully:', response.data.model_info);
+                    updatePredictButtonState();  // 统一更新按钮状态
+                    console.log('✅ 模型加载成功:', response.data.model_info);
                 } else {
                     showStatus('error', response.data.error);
                 }
             } catch (error) {
-                console.error('❌ Model loading failed:', error);
-                showStatus('error', `Model loading failed: ${error.response?.data?.error || error.message}`);
+                console.error('❌ 模型加载失败:', error);
+                showStatus('error', `模型加载失败: ${error.response?.data?.error || error.message}`);
             } finally {
                 showLoading(false);
                 document.getElementById('load-model-btn').disabled = false;
@@ -739,14 +799,14 @@
                 const status = response.data;
                 
                 if (status.loaded) {
-                    showStatus('success', `Model loaded: ${status.current_model.name} on ${status.current_model.device}`);
+                    showStatus('success', `模型已加载: ${status.current_model.name} 在 ${status.current_model.device}`);
                 } else if (status.available) {
-                    showStatus('info', 'Model available but not loaded');
+                    showStatus('info', '模型可用但未加载');
                 } else {
-                    showStatus('warning', 'Model library not available');
+                    showStatus('warning', '模型库不可用');
                 }
             } catch (error) {
-                console.error('❌ Failed to get model status:', error);
+                console.error('❌ 获取模型状态失败:', error);
             }
         }
 
@@ -757,57 +817,55 @@
                 const dataFiles = response.data;
                 
                 const dataFileSelect = document.getElementById('data-file-select');
-                dataFileSelect.innerHTML = '<option value="">Please select data file</option>';
-                
+                dataFileSelect.innerHTML = '<option value="">请选择数据文件</option>';
+
                 dataFiles.forEach(file => {
                     const option = document.createElement('option');
                     option.value = file.path;
                     option.textContent = `${file.name} (${file.size})`;
                     dataFileSelect.appendChild(option);
                 });
-                
-                console.log('✅ Data file list loaded successfully:', dataFiles);
+
+                console.log('✅ 数据文件列表加载成功:', dataFiles);
             } catch (error) {
-                console.error('❌ Failed to load data file list:', error);
-                showStatus('error', 'Failed to load data file list');
+                console.error('❌ 加载数据文件列表失败:', error);
+                showStatus('error', '加载数据文件列表失败');
             }
         }
 
         // Load data file
         async function loadData() {
             const filePath = document.getElementById('data-file-select').value;
-            
+
             if (!filePath) {
-                showStatus('error', 'Please select a data file to load');
+                showStatus('error', '请选择要加载的数据文件');
                 return;
             }
-            
+
             try {
                 showLoading(true);
                 document.getElementById('load-data-btn').disabled = true;
-                
+
                 const response = await axios.post('/api/load-data', {
                     file_path: filePath
                 });
-                
+
                 if (response.data.success) {
                     currentDataFile = filePath;
                     currentDataInfo = response.data.data_info;
                     showDataInfo(response.data.data_info);
                     showStatus('success', response.data.message);
-                    
-                    // Update prediction button status
-                    if (modelLoaded) {
-                        document.getElementById('predict-btn').disabled = false;
-                    }
-                    
-                    console.log('✅ Data loaded successfully:', response.data.data_info);
+
+                    // Update prediction button status with unified function
+                    updatePredictButtonState();  // 统一更新按钮状态
+
+                    console.log('✅ 数据加载成功:', response.data.data_info);
                 } else {
                     showStatus('error', response.data.error);
                 }
             } catch (error) {
-                console.error('❌ Data loading failed:', error);
-                showStatus('error', `Data loading failed: ${error.response?.data?.error || error.message}`);
+                console.error('❌ 数据加载失败:', error);
+                showStatus('error', `数据加载失败: ${error.response?.data?.error || error.message}`);
             } finally {
                 showLoading(false);
                 document.getElementById('load-data-btn').disabled = false;
@@ -984,46 +1042,70 @@
         // Update slider based on input fields
         function updateSliderFromInputs() {
             if (!sliderData) return;
-            
+
             // Fixed window size: 400 + 120 = 520 data points
             const lookback = 400;
             const predLen = 120;
             const windowSize = lookback + predLen; // Fixed at 520
-            
+
             // Calculate slider position
             const totalRows = sliderData.totalRows;
-            
+
             if (windowSize > totalRows) {
-                // If window size exceeds total data amount, show error
-                showStatus('error', `Insufficient data, need at least ${windowSize} data points, currently only ${totalRows} available`);
+                // If window size exceeds total data amount, show helpful error message in Chinese
+                const errorMsg = `❌ 数据不足：当前数据文件只有 ${totalRows} 个数据点，但系统需要至少 ${windowSize} 个数据点 (${lookback} 个回溯 + ${predLen} 个预测)。\n\n建议: 请选择一个更大的数据文件，例如 btc_1h.csv`;
+                showStatus('error', errorMsg);
+                console.warn('⚠️ 时间滑块初始化警告:', errorMsg);
+                // Don't disable the slider entirely, just show warning
+                // User can still interact with the page and load different data
                 return;
             }
-            
+
             // Calculate slider position (default select first half of data)
             const startPercentage = 0.1; // Start from 10%
             const endPercentage = startPercentage + (windowSize / totalRows);
-            
+
             // Update handle positions
             updateStartHandle(startPercentage);
             updateEndHandle(endPercentage);
-            
+
             // Update display information
             updateSliderFromHandles();
         }
 
         // Initialize time window slider
         function initializeTimeWindowSlider(dataInfo) {
+            // Parse dates safely
+            const startDateObj = new Date(dataInfo.start_date);
+            const endDateObj = new Date(dataInfo.end_date);
+
+            // Validate dates
+            if (isNaN(startDateObj.getTime()) || isNaN(endDateObj.getTime())) {
+                console.error('❌ 无法解析日期:', dataInfo.start_date, dataInfo.end_date);
+                showStatus('error', '数据日期格式错误，请检查数据文件');
+                return;
+            }
+
             sliderData = {
-                startDate: new Date(dataInfo.start_date),
-                endDate: new Date(dataInfo.end_date),
+                startDate: startDateObj,
+                endDate: endDateObj,
                 totalRows: dataInfo.rows,
                 timeframe: dataInfo.timeframe
             };
-            
-            // Set slider labels
-            document.getElementById('min-label').textContent = dataInfo.start_date.split('T')[0];
-            document.getElementById('max-label').textContent = dataInfo.end_date.split('T')[0];
-            
+
+            // Set slider labels - extract date part safely
+            const startDateStr = dataInfo.start_date.split('T')[0] || dataInfo.start_date;
+            const endDateStr = dataInfo.end_date.split('T')[0] || dataInfo.end_date;
+
+            document.getElementById('min-label').textContent = startDateStr;
+            document.getElementById('max-label').textContent = endDateStr;
+
+            console.log('✅ 时间滑块初始化成功:', {
+                startDate: startDateObj,
+                endDate: endDateObj,
+                totalRows: dataInfo.rows
+            });
+
             // Initialize slider position
             updateSliderFromInputs();
         }
@@ -1031,55 +1113,126 @@
         // Start prediction
         async function startPrediction() {
             if (!currentDataFile) {
-                showStatus('error', 'Please load data file first');
+                showStatus('error', '请先加载数据文件');
                 return;
             }
-            
+
             if (!modelLoaded) {
-                showStatus('error', 'Please load model first');
+                showStatus('error', '请先加载模型');
                 return;
             }
-            
+
+            // Prevent double submission
+            const predictBtn = document.getElementById('predict-btn');
+            if (predictBtn.disabled) {
+                console.warn('⚠️ 预测已在进行中，请勿重复点击');
+                return;
+            }
+
             try {
                 showLoading(true);
-                document.getElementById('predict-btn').disabled = true;
-                
+                predictBtn.disabled = true;
+
                 const lookback = parseInt(document.getElementById('lookback').value);
                 const predLen = parseInt(document.getElementById('pred-len').value);
-                
+
+                console.log(`📋 预测参数初始值: lookback=${lookback}, pred_len=${predLen}`);
+
                 // Get selected time range from time window slider
                 const startHandle = document.getElementById('start-handle');
                 const startPercentage = parseFloat(startHandle.style.left) / 100;
-                
+
+                console.log(`📊 时间滑块位置: ${(startPercentage * 100).toFixed(1)}%`);
+                console.log(`📊 时间滑块 DOM 元素状态: left="${startHandle.style.left}"`);
+
                 if (!sliderData) {
-                    showStatus('error', 'Time window slider not initialized');
+                    showStatus('error', '时间窗口滑块未初始化');
+                    console.error('❌ 预测失败: sliderData 未初始化');
                     return;
                 }
-                
+
+                // Check if data is sufficient for prediction
+                const windowSize = lookback + predLen; // 520 points required
+                if (sliderData.totalRows < windowSize) {
+                    showStatus('error', `❌ 数据不足：当前数据文件只有 ${sliderData.totalRows} 个数据点，预测需要至少 ${windowSize} 个数据点。请选择数据量更大的文件。`);
+                    console.error('❌ 预测失败: 数据不足', {
+                        required: windowSize,
+                        available: sliderData.totalRows
+                    });
+                    return;
+                }
+
+                // Validate slider data - more detailed diagnostics
+                console.log('🔍 时间滑块数据检查:');
+                console.log('  - startDate:', sliderData.startDate);
+                console.log('  - endDate:', sliderData.endDate);
+                console.log('  - totalRows:', sliderData.totalRows);
+                console.log('  - timeframe:', sliderData.timeframe);
+
+                if (!sliderData.startDate || !sliderData.endDate) {
+                    showStatus('error', '时间数据无效（startDate 或 endDate 为空），请重新加载数据文件');
+                    console.error('❌ sliderData 无效 - 日期对象为空:', sliderData);
+                    return;
+                }
+
+                const startDateMs = sliderData.startDate.getTime();
+                const endDateMs = sliderData.endDate.getTime();
+
+                if (isNaN(startDateMs) || isNaN(endDateMs)) {
+                    showStatus('error', '时间数据格式错误，请重新加载数据文件');
+                    console.error('❌ sliderData 日期无效:', {
+                        startDate: sliderData.startDate,
+                        startDateMs: startDateMs,
+                        endDate: sliderData.endDate,
+                        endDateMs: endDateMs
+                    });
+                    return;
+                }
+
+                console.log(`📅 数据时间范围: ${sliderData.startDate.toISOString()} 到 ${sliderData.endDate.toISOString()}`);
+                console.log(`📅 时间跨度: ${(endDateMs - startDateMs) / 1000 / 3600} 小时`);
+
                 // Calculate selected time range
-                const totalTime = sliderData.endDate.getTime() - sliderData.startDate.getTime();
-                const startTime = sliderData.startDate.getTime() + (totalTime * startPercentage);
+                const totalTime = endDateMs - startDateMs;
+                const startTime = startDateMs + (totalTime * startPercentage);
                 const startDate = new Date(startTime);
-                
+
+                console.log(`⏱️  计算后的开始时间: ${startDate.toISOString()}`);
+                console.log(`⏱️  计算详情: startPercentage=${startPercentage}, totalTime=${totalTime}ms, startTime=${startTime}ms`);
+
+                // Validate calculated date
+                if (isNaN(startDate.getTime())) {
+                    showStatus('error', '无法计算时间范围，请检查数据');
+                    console.error('❌ 计算的 startDate 无效:', {
+                        startTime: startTime,
+                        calculatedDate: startDate
+                    });
+                    return;
+                }
+
                 // Get prediction quality parameters
                 const temperature = parseFloat(document.getElementById('temperature').value);
                 const topP = parseFloat(document.getElementById('top-p').value);
                 const sampleCount = parseInt(document.getElementById('sample-count').value);
-                
+
+                const startDateStr = startDate.toISOString().slice(0, 16);
+                console.log(`🔧 预测质量参数: temperature=${temperature}, top_p=${topP}, sample_count=${sampleCount}`);
+                console.log(`📁 数据文件: ${currentDataFile}`);
+
                 let predictionParams = {
                     file_path: currentDataFile,
                     lookback: lookback,
                     pred_len: predLen,
-                    start_date: startDate.toISOString().slice(0, 16), // Format as YYYY-MM-DDTHH:MM
+                    start_date: startDateStr, // Format as YYYY-MM-DDTHH:MM
                     temperature: temperature,
                     top_p: topP,
                     sample_count: sampleCount
                 };
-                
-                console.log('🚀 Starting prediction, parameters:', predictionParams);
-                
+
+                console.log('🚀 开始预测，完整参数:', JSON.stringify(predictionParams, null, 2));
+
                 const response = await axios.post('/api/predict', predictionParams);
-                
+
                 if (response.data.success) {
                     // Display prediction results
                     displayPredictionResult(response.data);
@@ -1088,8 +1241,37 @@
                     showStatus('error', response.data.error);
                 }
             } catch (error) {
-                console.error('❌ Prediction failed:', error);
-                showStatus('error', `Prediction failed: ${error.response?.data?.error || error.message}`);
+                console.error('❌ 预测失败详细错误:', error);
+
+                let errorMsg = '预测失败：';
+                let detailedError = '';
+
+                if (error.response) {
+                    // 后端返回了错误响应
+                    const responseData = error.response.data;
+                    errorMsg += responseData?.error || `服务器错误 (HTTP ${error.response.status})`;
+
+                    if (responseData?.error_type) {
+                        detailedError = `\n\n【错误详情】\n类型: ${responseData.error_type}`;
+                    }
+
+                    if (responseData?.traceback) {
+                        console.error('【完整堆栈跟踪】\n', responseData.traceback);
+                    }
+
+                    console.error('服务器返回的错误:', responseData);
+                } else if (error.request) {
+                    // 请求已发送，但没有收到响应
+                    errorMsg += '网络超时或服务器无响应，请稍后重试';
+                    console.error('请求已发送但无响应:', error.request);
+                } else {
+                    // 其他错误
+                    errorMsg += error.message || '未知错误';
+                }
+
+                const finalMsg = errorMsg + detailedError;
+                showStatus('error', finalMsg);
+                console.log('完整错误对象:', error);
             } finally {
                 showLoading(false);
                 document.getElementById('predict-btn').disabled = false;
@@ -1113,19 +1295,19 @@
         // Display comparison analysis
         function displayComparisonAnalysis(result) {
             document.getElementById('comparison-section').style.display = 'block';
-            
+
             // Update comparison information
             document.getElementById('prediction-type').textContent = result.prediction_type;
-            document.getElementById('comparison-data').textContent = `${result.actual_data.length} actual data points`;
-            
+            document.getElementById('comparison-data').textContent = `${result.actual_data.length} 个实际数据点`;
+
             // Calculate error statistics
             const errorStats = getPredictionQuality(result.prediction_results, result.actual_data);
-            
+
             // Display error statistics
             document.getElementById('mae').textContent = errorStats.mae.toFixed(4);
             document.getElementById('rmse').textContent = errorStats.rmse.toFixed(4);
             document.getElementById('mape').textContent = errorStats.mape.toFixed(2);
-            
+
             // Fill comparison table
             fillComparisonTable(result.prediction_results, result.actual_data);
         }
@@ -1186,26 +1368,95 @@
             }
         }
 
+        // Download data from Binance
+        async function downloadData() {
+            const symbol = document.getElementById('download-symbol').value.trim();
+            const timeframe = document.getElementById('download-timeframe').value;
+            const dataPoints = parseInt(document.getElementById('download-points').value);
+
+            if (!symbol) {
+                showDownloadStatus('error', '请输入交易对符号');
+                return;
+            }
+
+            if (!timeframe) {
+                showDownloadStatus('error', '请选择时间周期');
+                return;
+            }
+
+            try {
+                showLoading(true);
+                document.getElementById('download-data-btn').disabled = true;
+
+                const response = await axios.post('/api/download-data', {
+                    symbol: symbol,
+                    timeframe: timeframe,
+                    data_points: dataPoints
+                });
+
+                if (response.data.success) {
+                    showDownloadStatus('success', response.data.message);
+
+                    // Display download info
+                    console.log('✅ 数据下载成功:', response.data.data_info);
+
+                    // Reload data file list
+                    setTimeout(async () => {
+                        await loadDataFiles();
+                        showDownloadStatus('info', `已自动刷新文件列表，可选择新下载的文件: ${response.data.data_info.file_name}`);
+                    }, 1000);
+                } else {
+                    showDownloadStatus('error', response.data.error);
+                }
+            } catch (error) {
+                console.error('❌ 数据下载失败:', error);
+                showDownloadStatus('error', `下载失败: ${error.response?.data?.error || error.message}`);
+            } finally {
+                showLoading(false);
+                document.getElementById('download-data-btn').disabled = false;
+            }
+        }
+
+        // Show download status
+        function showDownloadStatus(type, message) {
+            const statusDiv = document.getElementById('download-status');
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+
+            // Auto-hide (longer timeout for success messages)
+            const timeout = (type === 'success') ? 8000 : 5000;
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, timeout);
+        }
+
         // Set up event listeners
         function setupEventListeners() {
             // Load model button
             document.getElementById('load-model-btn').addEventListener('click', loadModel);
-            
+
+            // Download data button
+            document.getElementById('download-data-btn').addEventListener('click', downloadData);
+
             // Load data button
             document.getElementById('load-data-btn').addEventListener('click', loadData);
-            
+
+            // Refresh data files button
+            document.getElementById('refresh-data-btn').addEventListener('click', loadDataFiles);
+
             // Prediction button
             document.getElementById('predict-btn').addEventListener('click', startPrediction);
-            
+
             // Prediction quality parameter sliders
             document.getElementById('temperature').addEventListener('input', function() {
                 document.getElementById('temperature-value').textContent = this.value;
             });
-            
+
             document.getElementById('top-p').addEventListener('input', function() {
                 document.getElementById('top-p-value').textContent = this.value;
             });
-            
+
             // Update slider when lookback window size changes
             document.getElementById('lookback').addEventListener('input', updateSliderFromInputs);
             document.getElementById('pred-len').addEventListener('input', updateSliderFromInputs);
@@ -1215,13 +1466,19 @@
         function showStatus(type, message) {
             const statusDiv = document.getElementById('model-status');
             statusDiv.className = `status ${type}`;
-            statusDiv.textContent = message;
+            // Support multiline messages by setting innerHTML instead of textContent
+            if (message.includes('\n')) {
+                statusDiv.innerHTML = message.replace(/\n/g, '<br>');
+            } else {
+                statusDiv.textContent = message;
+            }
             statusDiv.style.display = 'block';
-            
-            // Auto-hide
+
+            // Auto-hide (longer timeout for error messages with more content)
+            const timeout = (type === 'error' && message.includes('\n')) ? 8000 : 5000;
             setTimeout(() => {
                 statusDiv.style.display = 'none';
-            }, 5000);
+            }, timeout);
         }
 
         // Show/hide loading status
