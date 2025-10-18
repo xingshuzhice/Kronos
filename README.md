@@ -327,6 +327,10 @@ This project is licensed under the [MIT License](./LICENSE).
 
 
 
+conda create -y python=3.11 -n  Kronos
+conda activate Kronos
+
+
 
 
 

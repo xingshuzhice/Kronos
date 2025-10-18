@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kronos 金融预测网页 UI</title>
+    <title> 金融预测网页 UI</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
@@ -35,7 +36,7 @@
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .header p {
@@ -54,7 +55,7 @@
             background: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             height: fit-content;
         }
 
@@ -132,7 +133,7 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .btn:disabled {
@@ -188,7 +189,7 @@
             background: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .chart-container h2 {
@@ -272,7 +273,7 @@
             border-radius: 50%;
             cursor: grab;
             border: 2px solid white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             z-index: 10;
         }
 
@@ -396,8 +397,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .model-info {
@@ -427,21 +433,22 @@
             .main-content {
                 grid-template-columns: 1fr;
             }
-            
+
             .container {
                 padding: 10px;
             }
-            
+
             .header h1 {
                 font-size: 2rem;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚀 Kronos 金融预测网页 UI</h1>
+            <h1>🚀 Xingshu 金融预测网页 UI</h1>
             <p>基于 AI 的金融 K 线数据预测分析平台</p>
         </div>
 
@@ -455,7 +462,7 @@
                     <select id="model-select">
                         <option value="">请先加载可用模型</option>
                     </select>
-                    <small class="form-text">选择要使用的 Kronos 模型</small>
+                    <small class="form-text">选择要使用的  模型</small>
                 </div>
 
                 <!-- Device Selection -->
@@ -478,47 +485,50 @@
                 <button id="load-model-btn" class="btn btn-secondary">
                     🔄 加载模型
                 </button>
+                <div style="display: none;">
+                    <hr style="margin: 20px 0; border: 1px solid #e2e8f0;">
 
-                <hr style="margin: 20px 0; border: 1px solid #e2e8f0;">
+                    <!-- Data Download Section -->
+                    <div class="form-group">
+                        <label>📥 下载数据</label>
+                        <small class="form-text">从 Binance 交易所下载实时数据</small>
+                    </div>
 
-                <!-- Data Download Section -->
-                <div class="form-group">
-                    <label>📥 下载数据</label>
-                    <small class="form-text">从 Binance 交易所下载实时数据</small>
+                    <div class="form-group">
+                        <label for="download-symbol">交易对:</label>
+                        <input type="text" id="download-symbol" placeholder="例如: BTC, ETH" value="BTC">
+                        <small class="form-text">输入交易对代码（不含 USDT）</small>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="download-timeframe">时间周期:</label>
+                        <select id="download-timeframe">
+                            <option value="">请选择时间周期</option>
+                            <option value="1m">1 分钟</option>
+                            <option value="5m">5 分钟</option>
+                            <option value="15m">15 分钟</option>
+                            <option value="30m">30 分钟</option>
+                            <option value="1h" selected>1 小时</option>
+                            <option value="4h">4 小时</option>
+                            <option value="1d">1 天</option>
+                            <option value="1w">1 周</option>
+                            <option value="1M">1 月</option>
+                        </select>
+                        <small class="form-text">选择 K 线时间周期</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="download-points">数据点数:</label>
+                        <input type="number" id="download-points" value="600" min="550" max="10000" step="50">
+                        <small class="form-text">要下载的 K 线根数（推荐 600</small>
+                    </div>
+
+                    <button id="download-data-btn" class="btn btn-warning">
+                        ⬇️ 下载数据
+                    </button>
+
                 </div>
-
-                <div class="form-group">
-                    <label for="download-symbol">交易对:</label>
-                    <input type="text" id="download-symbol" placeholder="例如: BTC, ETH" value="BTC">
-                    <small class="form-text">输入交易对代码（不含 USDT）</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="download-timeframe">时间周期:</label>
-                    <select id="download-timeframe">
-                        <option value="">请选择时间周期</option>
-                        <option value="1m">1 分钟</option>
-                        <option value="5m">5 分钟</option>
-                        <option value="15m">15 分钟</option>
-                        <option value="30m">30 分钟</option>
-                        <option value="1h" selected>1 小时</option>
-                        <option value="4h">4 小时</option>
-                        <option value="1d">1 天</option>
-                        <option value="1w">1 周</option>
-                        <option value="1M">1 月</option>
-                    </select>
-                    <small class="form-text">选择 K 线时间周期</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="download-points">数据点数:</label>
-                    <input type="number" id="download-points" value="600" min="550" max="10000" step="50">
-                    <small class="form-text">要下载的 K 线根数（推荐 600</small>
-                </div>
-
-                <button id="download-data-btn" class="btn btn-warning">
-                    ⬇️ 下载数据
-                </button>
 
                 <!-- Download Status -->
                 <div id="download-status" class="status" style="display: none;"></div>
@@ -701,13 +711,13 @@
         }
 
         // Initialize after page loads
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             initializeApp();
         });
 
         // Initialize application
         async function initializeApp() {
-            console.log('🚀 正在初始化 Kronos Web UI...');
+            console.log('🚀 正在初始化  Web UI...');
 
             // Load available models
             await loadAvailableModels();
@@ -733,8 +743,8 @@
                     populateModelSelect();
                     console.log('✅ 可用模型加载成功:', availableModels);
                 } else {
-                    console.warn('⚠️ Kronos 模型库不可用');
-                    showStatus('warning', 'Kronos 模型库不可用，将使用模拟预测');
+                    console.warn('⚠️  模型库不可用');
+                    showStatus('warning', ' 模型库不可用，将使用模拟预测');
                 }
             } catch (error) {
                 console.error('❌ 加载可用模型失败:', error);
@@ -746,7 +756,7 @@
         function populateModelSelect() {
             const modelSelect = document.getElementById('model-select');
             modelSelect.innerHTML = '<option value="">请选择模型</option>';
-            
+
             Object.entries(availableModels).forEach(([key, model]) => {
                 const option = document.createElement('option');
                 option.value = key;
@@ -797,7 +807,7 @@
             try {
                 const response = await axios.get('/api/model-status');
                 const status = response.data;
-                
+
                 if (status.loaded) {
                     showStatus('success', `模型已加载: ${status.current_model.name} 在 ${status.current_model.device}`);
                 } else if (status.available) {
@@ -815,7 +825,7 @@
             try {
                 const response = await axios.get('/api/data-files');
                 const dataFiles = response.data;
-                
+
                 const dataFileSelect = document.getElementById('data-file-select');
                 dataFileSelect.innerHTML = '<option value="">请选择数据文件</option>';
 
@@ -881,12 +891,12 @@
             document.getElementById('data-price-range').textContent = `${dataInfo.price_range.min.toFixed(4)} - ${dataInfo.price_range.max.toFixed(4)}`;
             document.getElementById('data-timeframe').textContent = dataInfo.timeframe;
             document.getElementById('data-prediction-cols').textContent = dataInfo.prediction_columns.join(', ');
-            
+
             // Initialize time window slider
             initializeTimeWindowSlider(dataInfo);
         }
 
-                    // Time window slider related variables
+        // Time window slider related variables
         let sliderData = null;
         let isDragging = false;
         let currentHandle = null;
@@ -902,61 +912,61 @@
             const startHandle = document.getElementById('start-handle');
             const endHandle = document.getElementById('end-handle');
             const track = document.querySelector('.slider-track');
-            
+
             // Start dragging
             startHandle.addEventListener('mousedown', (e) => {
                 isDragging = true;
                 currentHandle = 'start';
                 e.preventDefault();
             });
-            
+
             endHandle.addEventListener('mousedown', (e) => {
                 isDragging = true;
                 currentHandle = 'end';
                 e.preventDefault();
             });
-            
+
             // Dragging
             document.addEventListener('mousemove', (e) => {
                 if (!isDragging) return;
-                
+
                 const rect = track.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const percentage = Math.max(0, Math.min(1, x / rect.width));
-                
+
                 if (currentHandle === 'start') {
                     updateStartHandle(percentage);
                 } else if (currentHandle === 'end') {
                     updateEndHandle(percentage);
                 }
-                
+
                 updateSliderFromHandles();
             });
-            
+
             // End dragging
             document.addEventListener('mouseup', () => {
                 isDragging = false;
                 currentHandle = null;
             });
-            
+
             // Click track to set position directly
             track.addEventListener('click', (e) => {
                 const rect = track.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const percentage = Math.max(0, Math.min(1, x / rect.width));
-                
+
                 // Determine which handle is closer to the click position
                 const startHandle = document.getElementById('start-handle');
                 const endHandle = document.getElementById('end-handle');
                 const startRect = startHandle.getBoundingClientRect();
                 const endRect = endHandle.getBoundingClientRect();
-                
+
                 if (Math.abs(x - (startRect.left - rect.left)) < Math.abs(x - (endRect.left - rect.left))) {
                     updateStartHandle(percentage);
                 } else {
                     updateEndHandle(percentage);
                 }
-                
+
                 updateSliderFromHandles();
             });
         }
@@ -965,21 +975,21 @@
         function updateStartHandle(percentage) {
             const startHandle = document.getElementById('start-handle');
             const selection = document.getElementById('slider-selection');
-            
+
             // Fixed window size of 520 data points
             const windowSize = 520;
             const totalRows = sliderData ? sliderData.totalRows : 1000;
             const windowPercentage = windowSize / totalRows;
-            
+
             // Ensure start handle doesn't cause window to exceed data range
             if (percentage + windowPercentage > 1) {
                 percentage = 1 - windowPercentage;
             }
-            
+
             startHandle.style.left = (percentage * 100) + '%';
             selection.style.left = (percentage * 100) + '%';
             selection.style.width = (windowPercentage * 100) + '%';
-            
+
             // Automatically adjust end handle position to maintain fixed window size
             const endHandle = document.getElementById('end-handle');
             endHandle.style.left = ((percentage + windowPercentage) * 100) + '%';
@@ -989,21 +999,21 @@
         function updateEndHandle(percentage) {
             const endHandle = document.getElementById('end-handle');
             const selection = document.getElementById('slider-selection');
-            
+
             // Fixed window size of 520 data points
             const windowSize = 520;
             const totalRows = sliderData ? sliderData.totalRows : 1000;
             const windowPercentage = windowSize / totalRows;
-            
+
             // Ensure end handle doesn't cause window to exceed data range
             if (percentage - windowPercentage < 0) {
                 percentage = windowPercentage;
             }
-            
+
             endHandle.style.left = (percentage * 100) + '%';
             selection.style.left = ((percentage - windowPercentage) * 100) + '%';
             selection.style.width = (windowPercentage * 100) + '%';
-            
+
             // Automatically adjust start handle position to maintain fixed window size
             const startHandle = document.getElementById('start-handle');
             startHandle.style.left = ((percentage - windowPercentage) * 100) + '%';
@@ -1013,27 +1023,27 @@
         function updateSliderFromHandles() {
             const startHandle = document.getElementById('start-handle');
             const endHandle = document.getElementById('end-handle');
-            
+
             const startPercentage = parseFloat(startHandle.style.left) / 100;
             const endPercentage = parseFloat(endHandle.style.left) / 100;
-            
+
             if (!sliderData) return;
-            
+
             // Calculate selected time range
             const totalTime = sliderData.endDate.getTime() - sliderData.startDate.getTime();
             const startTime = sliderData.startDate.getTime() + (totalTime * startPercentage);
             const endTime = sliderData.startDate.getTime() + (totalTime * endPercentage);
-            
+
             const startDate = new Date(startTime);
             const endDate = new Date(endTime);
-            
+
             // Update display information
             document.getElementById('window-start').textContent = `Start: ${startDate.toLocaleDateString()}`;
             document.getElementById('window-end').textContent = `End: ${endDate.toLocaleDateString()}`;
-            
+
             // Display fixed window size
             document.getElementById('window-size').textContent = `Window Size: 400 + 120 = 520 data points (fixed)`;
-            
+
             // Input field values remain fixed
             document.getElementById('lookback').value = 400;
             document.getElementById('pred-len').value = 120;
@@ -1283,7 +1293,7 @@
             // Display chart
             const chartData = JSON.parse(result.chart);
             Plotly.newPlot('chart', chartData.data, chartData.layout);
-            
+
             // Display comparison analysis (if actual data exists)
             if (result.has_comparison) {
                 displayComparisonAnalysis(result);
@@ -1317,41 +1327,41 @@
             if (!predictions || !actuals || predictions.length === 0 || actuals.length === 0) {
                 return { mae: 0, rmse: 0, mape: 0 };
             }
-            
+
             const minLen = Math.min(predictions.length, actuals.length);
             let mae = 0, rmse = 0, mape = 0;
-            
+
             for (let i = 0; i < minLen; i++) {
                 const pred = predictions[i];
                 const act = actuals[i];
-                
+
                 // Use closing price to calculate errors
                 const error = Math.abs(pred.close - act.close);
                 const percentError = (error / act.close) * 100;
-                
+
                 mae += error;
                 rmse += error * error;
                 mape += percentError;
             }
-            
+
             mae /= minLen;
             rmse = Math.sqrt(rmse / minLen);
             mape /= minLen;
-            
+
             return { mae, rmse, mape };
         }
 
-                    // Fill comparison table
+        // Fill comparison table
         function fillComparisonTable(predictions, actuals) {
             const tbody = document.getElementById('comparison-tbody');
             tbody.innerHTML = '';
-            
+
             const minLen = Math.min(predictions.length, actuals.length);
-            
+
             for (let i = 0; i < minLen; i++) {
                 const pred = predictions[i];
                 const act = actuals[i];
-                
+
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${new Date(pred.timestamp).toLocaleString()}</td>
@@ -1449,11 +1459,11 @@
             document.getElementById('predict-btn').addEventListener('click', startPrediction);
 
             // Prediction quality parameter sliders
-            document.getElementById('temperature').addEventListener('input', function() {
+            document.getElementById('temperature').addEventListener('input', function () {
                 document.getElementById('temperature-value').textContent = this.value;
             });
 
-            document.getElementById('top-p').addEventListener('input', function() {
+            document.getElementById('top-p').addEventListener('input', function () {
                 document.getElementById('top-p-value').textContent = this.value;
             });
 
@@ -1492,4 +1502,5 @@
         }
     </script>
 </body>
+
 </html>

@@ -34,7 +34,9 @@ predictor = None
 # Available model configurations
 AVAILABLE_MODELS = {
     'kronos-mini': {
-        'name': 'Kronos-mini',
+        # 'name': 'Kronos-mini',
+        # 使用中文
+        'name': "mini版",
         'model_id': 'NeoQuasar/Kronos-mini',
         'tokenizer_id': 'NeoQuasar/Kronos-Tokenizer-2k',
         'context_length': 2048,
@@ -42,7 +44,8 @@ AVAILABLE_MODELS = {
         'description': '轻量级模型，适合快速预测'
     },
     'kronos-small': {
-        'name': 'Kronos-small',
+        # 'name': 'Kronos-small',
+        'name': 'small版',
         'model_id': 'NeoQuasar/Kronos-small',
         'tokenizer_id': 'NeoQuasar/Kronos-Tokenizer-base',
         'context_length': 512,
@@ -50,13 +53,22 @@ AVAILABLE_MODELS = {
         'description': '小型模型，平衡性能和速度'
     },
     'kronos-base': {
-        'name': 'Kronos-base',
+        # 'name': 'Kronos-base',
+        'name': 'base版',
         'model_id': 'NeoQuasar/Kronos-base',
         'tokenizer_id': 'NeoQuasar/Kronos-Tokenizer-base',
         'context_length': 512,
         'params': '102.3M',
         'description': '基础模型，提供更好的预测质量'
-    }
+    },
+    # 'Kronos-large': {
+    #     'name': 'Kronos-large',
+    #     'model_id': 'NeoQuasar/Kronos-large',
+    #     'tokenizer_id': 'NeoQuasar/Kronos-Tokenizer-base',
+    #     'context_length': 512,
+    #     'params': '499.2M',
+    #     'description': 'Large model, provides better prediction quality'
+    # }
 }
 
 def fetch_and_save_ohlcv(symbol, timeframe, data_points=350):
