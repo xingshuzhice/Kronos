@@ -366,7 +366,7 @@ def create_prediction_chart(df, pred_df, lookback, pred_len, actual_df=None, his
     
     # Update layout
     fig.update_layout(
-        title='Kronos 金融预测结果 - 400 个历史数据点 + 120 个预测点 vs 120 个实际数据点',
+        title='Xingshu 金融预测结果 - 400 个历史数据点 + 120 个预测点 vs 120 个实际数据点',
         xaxis_title='时间',
         yaxis_title='价格',
         template='plotly_white',
@@ -510,7 +510,7 @@ def predict():
         print(f"[检查] 请求编号: {id(request)}")  # 用来追踪请求
 
         if not MODEL_AVAILABLE:
-            error_msg = '❌ Kronos 模型库不可用，请检查依赖安装'
+            error_msg = '❌ Xingshu 模型库不可用，请检查依赖安装'
             print(f"[错误] {error_msg}")
             return jsonify({'error': error_msg}), 400
 
@@ -579,14 +579,14 @@ def predict():
                 end_timestamp = time_range_df['timestamps'].iloc[lookback+pred_len-1]
                 time_span = end_timestamp - start_timestamp
 
-                prediction_type = f"Kronos 模型预测（在选定窗口内：前 {lookback} 个数据点用于预测，后 {pred_len} 个数据点用于对比，时间跨度：{time_span}）"
+                prediction_type = f"Xingshu 模型预测（在选定窗口内：前 {lookback} 个数据点用于预测，后 {pred_len} 个数据点用于对比，时间跨度：{time_span}）"
             else:
                 print(f"[检查] 使用最新数据进行预测")
                 # Use latest data
                 x_df = df.iloc[:lookback][required_cols]
                 x_timestamp = df.iloc[:lookback]['timestamps']
                 y_timestamp = df.iloc[lookback:lookback+pred_len]['timestamps']
-                prediction_type = "Kronos 模型预测（最新数据）"
+                prediction_type = "Xingshu 模型预测（最新数据）"
 
             print(f"[检查] 输入数据形状: {x_df.shape}")
 
@@ -614,7 +614,7 @@ def predict():
 
         except Exception as e:
             import traceback
-            error_msg = f'Kronos 模型预测失败: {str(e)}'
+            error_msg = f'Xingshu 模型预测失败: {str(e)}'
             print(f"\n[错误] {error_msg}")
             print(f"[错误] 异常类型: {type(e).__name__}")
             print(f"[堆栈跟踪]:\n{traceback.format_exc()}")
@@ -765,7 +765,7 @@ def load_model():
 
     try:
         if not MODEL_AVAILABLE:
-            return jsonify({'error': 'Kronos 模型库不可用'}), 400
+            return jsonify({'error': 'Xingshu 模型库不可用'}), 400
 
         data = request.get_json()
         model_key = data.get('model_key', 'kronos-small')
